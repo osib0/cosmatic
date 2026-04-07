@@ -29,8 +29,6 @@ export default function CategoryMenu() {
           >
             <ChevronLeft size={20} className="text-gray-600" />
           </button>
-
-
           {/* Scrollable Menu */}
           <div
             ref={scrollRef}
