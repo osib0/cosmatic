@@ -19,13 +19,13 @@ export default function CategoryMenu() {
   };
 
   return (
-    <div className="bg-white border-b border-gray-200 sticky top-20 z-40">
+    <div className="bg-white border-b border-gray-200 sticky top-17 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
         <div className="relative flex items-center">
           {/* Left Scroll Button */}
           <button
             onClick={() => scroll('left')}
-            className="hidden md:flex absolute left-0 z-10 bg-white p-2 hover:bg-gray-100 transition-colors rounded-r-md border border-gray-200 hover:border-gray-300"
+            className="hidden md:flex absolute left-0 z-10 bg-white p-2 hover:bg-gray-100 transition-colors rounded-2xl  hover:border-gray-300"
           >
             <ChevronLeft size={20} className="text-gray-600" />
           </button>
@@ -51,7 +51,7 @@ export default function CategoryMenu() {
           {/* Right Scroll Button */}
           <button
             onClick={() => scroll('right')}
-            className="hidden md:flex absolute right-0 z-10 bg-white p-2 hover:bg-gray-100 transition-colors rounded-l-md border border-gray-200 hover:border-gray-300"
+            className="hidden md:flex absolute right-0 z-10 bg-white p-2 hover:bg-gray-100 transition-colors rounded-2xl hover:border-gray-300"
           >
             <ChevronRight size={20} className="text-gray-600" />
           </button>
