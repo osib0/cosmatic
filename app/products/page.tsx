@@ -1,188 +1,250 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
-import { allProducts } from '@/data/products';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, SlidersHorizontal, X } from 'lucide-react';
+
+interface Product {
+  _id: string;
+  name: string;
+  price: number;
+  originalPrice?: number;
+  discount?: number;
+  category: string;
+  description?: string;
+  image: string;
+  inStock: boolean;
+  rating: number;
+  reviews: number;
+  featured: boolean;
+}
+
+const CATEGORIES = ['Makeup', 'Skin', 'Hair', 'Fragrance', 'Bath & Body', 'Wellness'];
 
 export default function ProductsPage() {
-  const [sortBy, setSortBy] = useState('trending');
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(3000);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [total, setTotal] = useState(0);
+  const [sortBy, setSortBy] = useState('newest');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(5000);
+  const [search, setSearch] = useState('');
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const categories = ['Makeup', 'Skin', 'Hair', 'Bath & Body', 'Fragrance', 'Wellness'];
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const params = new URLSearchParams({ limit: '100' });
+        if (search) params.set('search', search);
+        // Fetch all and filter/sort client side for responsive UI
+        const res = await fetch(`/api/products?${params}`);
+        const data = await res.json();
+        setProducts(data.products ?? []);
+        setTotal(data.total ?? 0);
+      } catch {
+        console.error('Failed to fetch products');
+      } finally {
+        setLoading(false);
+      }
+    };
+    const t = setTimeout(fetchProducts, 300);
+    return () => clearTimeout(t);
+  }, [search]);
 
-  // Filter products
-  let filteredProducts = allProducts.filter((p) => p.price >= minPrice && p.price <= maxPrice);
-  
-  if (selectedCategories.length > 0) {
-    filteredProducts = filteredProducts.filter((p) =>
-      selectedCategories.includes(p.category)
-    );
-  }
+  // Client-side filter + sort
+  let filtered = products.filter(p => p.price >= minPrice && p.price <= maxPrice);
+  if (selectedCategories.length > 0) filtered = filtered.filter(p => selectedCategories.includes(p.category));
 
-  // Sort products
-  const sortedProducts = [...filteredProducts].sort((a, b) => {
+  const sorted = [...filtered].sort((a, b) => {
     if (sortBy === 'price-low') return a.price - b.price;
     if (sortBy === 'price-high') return b.price - a.price;
     if (sortBy === 'rating') return b.rating - a.rating;
-    if (sortBy === 'newest') return parseInt(b.id) - parseInt(a.id);
+    if (sortBy === 'featured') return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
     return 0;
   });
 
-  const toggleCategory = (category: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category]
-    );
+  const toggleCategory = (cat: string) =>
+    setSelectedCategories(prev => prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]);
+
+  const resetFilters = () => {
+    setSelectedCategories([]);
+    setMinPrice(0);
+    setMaxPrice(5000);
+    setSortBy('newest');
+    setSearch('');
   };
 
-  return (
-    <div className="bg-white">
-      <Navbar />
-
-      {/* Page Header */}
-      <div className="py-8 bg-gray-50 border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-2">
-            All Products
-          </h1>
-          <p className="text-gray-600">{sortedProducts.length} products available</p>
+  const FilterSidebar = () => (
+    <div className="space-y-6">
+      <div>
+        <h3 style={{ fontFamily: 'Josefin Sans, sans-serif', fontWeight: 700, fontSize: '0.85rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#A89AA1', marginBottom: '1rem' }}>Categories</h3>
+        <div className="space-y-2.5">
+          {CATEGORIES.map(cat => (
+            <label key={cat} className="flex items-center gap-3 cursor-pointer group">
+              <div
+                onClick={() => toggleCategory(cat)}
+                className="w-4.5 h-4.5 rounded-md border-2 flex items-center justify-center cursor-pointer transition-all flex-shrink-0"
+                style={{ width: '18px', height: '18px', borderColor: selectedCategories.includes(cat) ? '#D4697E' : '#E5D5D9', background: selectedCategories.includes(cat) ? '#D4697E' : 'white' }}
+              >
+                {selectedCategories.includes(cat) && <span style={{ color: 'white', fontSize: '10px', fontWeight: 700 }}>✓</span>}
+              </div>
+              <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.9rem', color: selectedCategories.includes(cat) ? '#D4697E' : '#6B5E65', fontWeight: selectedCategories.includes(cat) ? 600 : 400 }}>
+                {cat}
+              </span>
+            </label>
+          ))}
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Sidebar Filters */}
-          <div className="md:col-span-1">
-            <div className="bg-white border border-gray-200 p-6 rounded-lg sticky top-24 space-y-6">
-              <h2 className="text-xl font-bold text-gray-900">Filters</h2>
-
-              {/* Category Filter */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">Categories</h3>
-                <div className="space-y-3">
-                  {categories.map((category) => (
-                    <label key={category} className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={selectedCategories.includes(category)}
-                        onChange={() => toggleCategory(category)}
-                        className="w-4 h-4 rounded"
-                      />
-                      <span className="text-gray-700">{category}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Price Filter */}
-              <div className="border-t pt-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">Price Range</h3>
-                <div className="space-y-3">
-                  <div>
-                    <label className="text-sm text-gray-600">
-                      Min: ₹{minPrice}
-                    </label>
-                    <input
-                      type="range"
-                      min="0"
-                      max="2999"
-                      value={minPrice}
-                      onChange={(e) => setMinPrice(Number(e.target.value))}
-                      className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm text-gray-600">
-                      Max: ₹{maxPrice}
-                    </label>
-                    <input
-                      type="range"
-                      min="1"
-                      max="3000"
-                      value={maxPrice}
-                      onChange={(e) => setMaxPrice(Number(e.target.value))}
-                      className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Sort Options */}
-              <div className="border-t pt-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">Sort By</h3>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-500"
-                >
-                  <option value="trending">Trending</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="rating">Highest Rated</option>
-                  <option value="newest">Newest</option>
-                </select>
-              </div>
-
-              {/* Reset Filters */}
-              <button
-                onClick={() => {
-                  setSelectedCategories([]);
-                  setMinPrice(0);
-                  setMaxPrice(3000);
-                  setSortBy('trending');
-                }}
-                className="w-full border border-gray-300 text-gray-900 py-2 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
-              >
-                Reset Filters
-              </button>
+      <div style={{ borderTop: '1px solid #F0E8EA', paddingTop: '1.5rem' }}>
+        <h3 style={{ fontFamily: 'Josefin Sans, sans-serif', fontWeight: 700, fontSize: '0.85rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#A89AA1', marginBottom: '1rem' }}>Price Range</h3>
+        <div className="space-y-4">
+          <div className="flex gap-3">
+            <div className="flex-1">
+              <label className="form-label" style={{ fontSize: '0.7rem' }}>Min (₹)</label>
+              <input type="number" className="form-input" style={{ padding: '0.5rem 0.75rem', fontSize: '0.875rem' }} value={minPrice} onChange={e => setMinPrice(Number(e.target.value))} min={0} />
+            </div>
+            <div className="flex-1">
+              <label className="form-label" style={{ fontSize: '0.7rem' }}>Max (₹)</label>
+              <input type="number" className="form-input" style={{ padding: '0.5rem 0.75rem', fontSize: '0.875rem' }} value={maxPrice} onChange={e => setMaxPrice(Number(e.target.value))} max={10000} />
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* Products Grid */}
-          <div className="md:col-span-3">
-            {sortedProducts.length > 0 ? (
-              <>
-                <div className="mb-6 flex items-center justify-between">
-                  <p className="text-gray-600">
-                    Showing <span className="font-semibold">{sortedProducts.length}</span> results
-                  </p>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {sortedProducts.map((product) => (
-                    <Link
-                      key={product.id}
-                      href={`/products/${product.id}`}
-                      className="hover:opacity-90 transition-opacity"
-                    >
-                      <ProductCard product={product} />
-                    </Link>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <div className="text-center py-12">
-                <p className="text-xl text-gray-500 mb-4">No products found</p>
-                <button
-                  onClick={() => {
-                    setSelectedCategories([]);
-                    setMinPrice(0);
-                    setMaxPrice(3000);
-                  }}
-                  className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-shadow"
-                >
-                  Clear Filters
-                </button>
-              </div>
+      <div style={{ borderTop: '1px solid #F0E8EA', paddingTop: '1.5rem' }}>
+        <h3 style={{ fontFamily: 'Josefin Sans, sans-serif', fontWeight: 700, fontSize: '0.85rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#A89AA1', marginBottom: '0.75rem' }}>Sort By</h3>
+        <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="form-input" style={{ padding: '0.6rem 0.75rem', fontSize: '0.875rem' }}>
+          <option value="newest">Newest</option>
+          <option value="price-low">Price: Low to High</option>
+          <option value="price-high">Price: High to Low</option>
+          <option value="rating">Highest Rated</option>
+          <option value="featured">Featured First</option>
+        </select>
+      </div>
+
+      <button onClick={resetFilters} className="btn-ghost w-full" style={{ padding: '0.65rem', fontSize: '0.85rem' }}>Reset All Filters</button>
+    </div>
+  );
+
+  return (
+    <div className="bg-white min-h-screen">
+      <Navbar />
+
+      {/* Page Header */}
+      <div style={{ background: 'linear-gradient(135deg, #FDF2F4 0%, #FDF8F2 100%)', borderBottom: '1px solid #F0E8EA', padding: '2.5rem 0 2rem' }}>
+        <div className="section-container">
+          <h1 style={{ fontFamily: 'Josefin Sans, sans-serif', fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 700, color: '#1A1219', marginBottom: '0.5rem' }}>
+            All Products
+          </h1>
+          <p style={{ color: '#6B5E65', fontFamily: 'DM Sans, sans-serif' }}>
+            {loading ? 'Loading...' : `${sorted.length} of ${total} products`}
+          </p>
+        </div>
+      </div>
+
+      <div className="section-container py-8 mt-10">
+        {/* Toolbar */}
+        <div className="flex flex-wrap gap-3 items-center mb-6">
+          {/* Search */}
+          <div className="flex-1 min-w-48 relative">
+            <input
+              type="text"
+              className="form-input"
+              placeholder="Search products..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              style={{ paddingRight: search ? '2.5rem' : undefined }}
+            />
+            {search && (
+              <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: '#A89AA1' }}>
+                <X size={15} />
+              </button>
             )}
           </div>
+
+          {/* Sort select (desktop) */}
+          <div className="relative hide-mobile">
+            <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="form-input appearance-none pr-8" style={{ minWidth: '180px', cursor: 'pointer' }}>
+              <option value="newest">Sort: Newest</option>
+              <option value="price-low">Price: Low → High</option>
+              <option value="price-high">Price: High → Low</option>
+              <option value="rating">Highest Rated</option>
+              <option value="featured">Featured First</option>
+            </select>
+            <ChevronDown size={15} className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#A89AA1' }} />
+          </div>
+
+          {/* Filter toggle (mobile) */}
+          <button onClick={() => setFiltersOpen(!filtersOpen)} className="btn-ghost hide-desktop flex items-center gap-2" style={{ padding: '0.65rem 1rem', fontSize: '0.875rem' }}>
+            <SlidersHorizontal size={16} /> Filters
+            {(selectedCategories.length > 0) && <span className="badge badge-primary">{selectedCategories.length}</span>}
+          </button>
+        </div>
+
+        <div className="flex gap-8">
+          {/* Sidebar — Desktop */}
+          <aside className="w-60 flex-shrink-0 hide-mobile">
+            <div className="card sticky top-24" style={{ padding: '1.5rem' }}>
+              <div className="flex items-center justify-between mb-5">
+                <h2 style={{ fontFamily: 'Josefin Sans, sans-serif', fontWeight: 700, fontSize: '1rem', color: '#1A1219' }}>Filters</h2>
+                {(selectedCategories.length > 0 || minPrice > 0 || maxPrice < 5000) && (
+                  <button onClick={resetFilters} style={{ color: '#D4697E', fontSize: '0.8rem', fontFamily: 'DM Sans, sans-serif' }}>Clear all</button>
+                )}
+              </div>
+              <FilterSidebar />
+            </div>
+          </aside>
+
+          {/* Mobile Filters Drawer */}
+          {filtersOpen && (
+            <div className="fixed inset-0 z-50 hide-desktop" style={{ background: 'rgba(0,0,0,0.3)' }} onClick={() => setFiltersOpen(false)}>
+              <div className="absolute right-0 top-0 bottom-0 w-80 bg-white p-6 overflow-y-auto" onClick={e => e.stopPropagation()}>
+                <div className="flex items-center justify-between mb-6">
+                  <h2 style={{ fontFamily: 'Josefin Sans, sans-serif', fontWeight: 700 }}>Filters</h2>
+                  <button onClick={() => setFiltersOpen(false)} style={{ color: '#6B5E65' }}><X size={20} /></button>
+                </div>
+                <FilterSidebar />
+              </div>
+            </div>
+          )}
+
+          {/* Products Grid */}
+          <main className="flex-1 min-w-0">
+            {loading ? (
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="rounded-xl overflow-hidden">
+                    <div className="skeleton h-48" />
+                    <div className="p-4 space-y-2">
+                      <div className="skeleton h-4 w-3/4" />
+                      <div className="skeleton h-4 w-1/2" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : sorted.length === 0 ? (
+              <div className="text-center py-20">
+                <div className="text-5xl mb-4">🔍</div>
+                <h3 style={{ fontFamily: 'Josefin Sans, sans-serif', fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>No products found</h3>
+                <p style={{ color: '#6B5E65', fontFamily: 'DM Sans, sans-serif', marginBottom: '1.5rem' }}>Try adjusting your filters or search term</p>
+                <button onClick={resetFilters} className="btn-primary" style={{ padding: '0.65rem 1.5rem', fontSize: '0.875rem' }}>Clear Filters</button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {sorted.map(product => (
+                  <Link key={product._id} href={`/products/${product._id}`} className="block hover:no-underline">
+                    <ProductCard product={product as unknown as import('@/data/products').Product} />
+                  </Link>
+                ))}
+              </div>
+            )}
+          </main>
         </div>
       </div>
 

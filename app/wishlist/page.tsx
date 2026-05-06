@@ -1,70 +1,97 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
-import { allProducts } from '@/data/products';
-import { Heart, ArrowLeft } from 'lucide-react';
+import { useStore } from '@/context/StoreContext';
+import { Heart, ArrowLeft, ShoppingBag, Sparkles } from 'lucide-react';
 
 export default function WishlistPage() {
-  // Mock wishlist items
-  const wishlistItems = [
-    allProducts[0],
-    allProducts[4],
-    allProducts[8],
-    allProducts[15],
-  ];
+  const { wishlist, addToCart } = useStore();
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      if (wishlist.length === 0) {
+        setProducts([]);
+        setLoading(false);
+        return;
+      }
+      try {
+        const res = await fetch(`/api/products?ids=${wishlist.join(',')}`);
+        const data = await res.json();
+        setProducts(data.products || []);
+      } catch (err) {
+        console.error('Error fetching wishlist products:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchWishlist();
+  }, [wishlist]);
+
+  const handleAddAllToCart = () => {
+    products.forEach(p => addToCart(p));
+  };
 
   return (
     <div className="bg-white min-h-screen flex flex-col">
       <Navbar />
 
-      <div className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-10 py-8">
-        <div className="flex items-center gap-4 mb-8">
-          <Link href="/" className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-            <ArrowLeft size={24} className="text-gray-600" />
-          </Link>
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
-              <Heart className="fill-red-500 text-red-500" size={32} />
-              Wishlist
-            </h1>
-            <p className="text-gray-600 mt-1">{wishlistItems.length} items saved</p>
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-10 py-12">
+        <div className="flex items-center justify-between mb-12">
+          <div className="flex items-center gap-4">
+            <Link href="/products" className="w-10 h-10 flex items-center justify-center hover:bg-gray-50 rounded-xl border border-gray-100 transition-all text-gray-400 hover:text-pink-500">
+              <ArrowLeft size={20} />
+            </Link>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 font-josefin flex items-center gap-3">
+                My Wishlist
+                <span className="text-sm font-normal text-gray-400 bg-gray-50 px-3 py-1 rounded-full border border-gray-100">
+                  {wishlist.length} items
+                </span>
+              </h1>
+            </div>
           </div>
+          
+          {products.length > 0 && (
+            <button 
+              onClick={handleAddAllToCart}
+              className="btn-primary flex items-center gap-2"
+            >
+              <ShoppingBag size={18} />
+              Add All to Cart
+            </button>
+          )}
         </div>
 
-        {wishlistItems.length > 0 ? (
-          <div>
-            {/* Wishlist Actions */}
-            <div className="mb-8 flex gap-4">
-              <button className="px-6 py-2 bg-pink-500 text-white rounded-md font-semibold hover:bg-pink-600 transition-all border border-pink-600">
-                Add All to Cart
-              </button>
-              <button className="px-6 py-2 border border-gray-300 text-gray-900 rounded-md font-semibold hover:bg-gray-50 transition-all">
-                Move to Cart
-              </button>
-            </div>
-
-            {/* Products Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {wishlistItems.map((product) => (
-                <Link key={product.id} href={`/products/${product.id}`}>
-                  <ProductCard product={product} />
-                </Link>
-              ))}
-            </div>
+        {loading ? (
+          <div className="text-center py-24">
+            <div className="w-12 h-12 border-4 border-pink-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-gray-400 font-medium">Loading your favorites...</p>
+          </div>
+        ) : products.length > 0 ? (
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-fadeIn">
+            {products.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
           </div>
         ) : (
-          <div className="text-center py-12 bg-gray-50 rounded-lg">
-            <Heart size={48} className="mx-auto text-gray-300 mb-4" />
-            <p className="text-xl text-gray-500 mb-4">Your wishlist is empty</p>
-            <Link href="/" className="text-pink-600 hover:text-pink-700 font-semibold">
-              Start Shopping
+          <div className="text-center py-24 bg-gray-50/50 rounded-[2.5rem] border border-dashed border-gray-200">
+            <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-sm">
+              <Heart size={32} className="text-gray-200" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2 font-josefin">Your wishlist is empty</h2>
+            <p className="text-gray-500 mb-8 max-w-xs mx-auto">Save your favorite premium beauty picks here and shop them later.</p>
+            <Link href="/products" className="btn-primary inline-flex items-center gap-2">
+              <Sparkles size={18} /> Explore Products
             </Link>
           </div>
         )}
-      </div>
+      </main>
 
       <Footer />
     </div>

@@ -1,125 +1,328 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap');
 @import "tailwindcss";
 
+/* =============================================
+   DESIGN TOKENS — COSMATIC LIGHT ROSE THEME
+   ============================================= */
 @theme {
-  --color-primary: #C8A2C8;
-  --color-primary-dark: #B08BB5;
-  --color-primary-light: #D8B2D8;
-  --color-secondary: #FFFFFF;
-  --color-accent-gold: #D4AF37;
-  --color-accent-peach: #FFB6A3;
-  --color-text-dark: #333333;
-  --color-text-light: #666666;
-  --color-text-lighter: #999999;
-  --color-border-light: #E8E8E8;
-  --color-bg-light: #F9F9F9;
-  
-  --font-heading: 'Playfair Display', serif;
-  --font-title: 'Poppins', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --color-primary: #D4697E;
+  --color-primary-dark: #B84F65;
+  --color-primary-light: #F2B3BF;
+  --color-primary-bg: #FDF2F4;
+
+  --color-accent: #C9975A;
+  --color-accent-light: #E8C49A;
+  --color-accent-bg: #FDF8F2;
+
+  --color-bg: #FFFFFF;
+  --color-surface: #FAFAFA;
+  --color-surface-2: #F5F5F5;
+  --color-border: #F0E8EA;
+  --color-border-mid: #E5D5D9;
+
+  --color-text: #1A1219;
+  --color-text-muted: #6B5E65;
+  --color-text-faint: #A89AA1;
+
+  --color-success: #16A34A;
+  --color-error: #DC2626;
+  --color-warning: #D97706;
+
+  --font-heading: 'Josefin Sans', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #333333;
-  --primary: #C8A2C8;
-  --accent: #D4AF37;
+  --background: #FFFFFF;
+  --foreground: #1A1219;
+  --primary: #D4697E;
+  --accent: #C9975A;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0f0f0f;
-    --foreground: #f0f0f0;
-  }
-}
+/* =============================================
+   BASE
+   ============================================= */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: 'Inter', sans-serif;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-html {
-  scroll-behavior: smooth;
+  background: #FFFFFF;
+  color: #1A1219;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Playfair Display', serif;
-  color: var(--text-dark, #333333);
-}
-
-.heading-primary {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(1.5rem, 5vw, 3rem);
-  font-weight: 700;
-}
-
-.heading-secondary {
-  font-family: 'Poppins', sans-serif;
-  font-size: clamp(1.25rem, 3vw, 1.875rem);
+  font-family: 'Josefin Sans', sans-serif;
   font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #1A1219;
 }
 
-.body-text {
-  font-family: 'Inter', sans-serif;
-  font-size: 1rem;
-  line-height: 1.6;
+a { color: inherit; text-decoration: none; transition: all 0.25s ease; }
+input, textarea, select, button { font-family: 'DM Sans', sans-serif; transition: all 0.25s ease; }
+img { max-width: 100%; display: block; }
+
+/* =============================================
+   SCROLLBAR
+   ============================================= */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #F5F5F5; }
+::-webkit-scrollbar-thumb { background: #D4697E50; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #D4697E90; }
+
+/* =============================================
+   GRADIENT UTILITIES
+   ============================================= */
+.gradient-primary { background: linear-gradient(135deg, #D4697E 0%, #B84F65 100%); }
+.gradient-warm { background: linear-gradient(135deg, #FDF2F4 0%, #FDF8F2 100%); }
+
+.text-gradient {
+  background: linear-gradient(135deg, #D4697E, #C9975A);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* Smooth scrolling animations */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* =============================================
+   BUTTON STYLES
+   ============================================= */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  background: linear-gradient(135deg, #D4697E, #B84F65);
+  color: #ffffff;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(212, 105, 126, 0.25);
 }
+.btn-primary:hover { box-shadow: 0 4px 20px rgba(212, 105, 126, 0.4); transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
 
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Shadow utilities - REMOVED, use borders instead */
-
-/* Border utility */
-.border-light {
-  border: 1px solid #E8E8E8;
-}
-
-/* Smooth transition for interactive elements */
-button, a, input {
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  background: transparent;
+  color: #D4697E;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1.5px solid #D4697E;
+  border-radius: 8px;
+  cursor: pointer;
   transition: all 0.3s ease;
 }
+.btn-outline:hover { background: #FDF2F4; }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  background: #F5F5F5;
+  color: #6B5E65;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+  border: 1px solid #E5D5D9;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn-ghost:hover { background: #F0E8EA; }
+
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  background: linear-gradient(135deg, #C9975A, #A8793E);
+  color: #ffffff;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(201, 151, 90, 0.3);
+}
+.btn-gold:hover { box-shadow: 0 4px 20px rgba(201, 151, 90, 0.4); transform: translateY(-1px); }
+
+/* =============================================
+   FORM STYLES
+   ============================================= */
+.form-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: #FFFFFF;
+  border: 1.5px solid #E5D5D9;
+  border-radius: 8px;
+  color: #1A1219;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.25s ease;
+}
+.form-input::placeholder { color: #A89AA1; }
+.form-input:focus {
+  border-color: #D4697E;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(212, 105, 126, 0.1);
+}
+
+.form-label {
+  display: block;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #6B5E65;
+  margin-bottom: 0.45rem;
+}
+
+/* =============================================
+   CARD STYLES
+   ============================================= */
+.card {
+  background: #FFFFFF;
+  border: 1px solid #F0E8EA;
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+.card:hover { border-color: #E5D5D9; box-shadow: 0 4px 24px rgba(212, 105, 126, 0.08); }
+
+.card-surface {
+  background: #FAFAFA;
+  border: 1px solid #F0E8EA;
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+/* =============================================
+   BADGE STYLES
+   ============================================= */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.badge-primary { background: #FDF2F4; color: #B84F65; border: 1px solid #F2B3BF; }
+.badge-success { background: #F0FDF4; color: #16A34A; border: 1px solid #BBF7D0; }
+.badge-warning { background: #FFFBEB; color: #D97706; border: 1px solid #FDE68A; }
+.badge-error   { background: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; }
+.badge-gold    { background: #FDF8F2; color: #A8793E; border: 1px solid #E8C49A; }
+.badge-gray    { background: #F5F5F5; color: #6B5E65; border: 1px solid #E5D5D9; }
+
+/* =============================================
+   ANIMATIONS
+   ============================================= */
+@keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn   { from { opacity:0; } to { opacity:1; } }
+@keyframes scaleIn  { from { opacity:0; transform:scale(0.96); } to { opacity:1; transform:scale(1); } }
+@keyframes shimmer  { 0% { background-position:-200% 0; } 100% { background-position:200% 0; } }
+@keyframes float    { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-6px); } }
+@keyframes spin     { to { transform:rotate(360deg); } }
+
+.animate-fadeInUp { animation: fadeInUp 0.4s ease forwards; }
+.animate-fadeIn   { animation: fadeIn 0.3s ease forwards; }
+.animate-scaleIn  { animation: scaleIn 0.25s ease forwards; }
+.animate-float    { animation: float 3s ease-in-out infinite; }
+.animate-spin     { animation: spin 1s linear infinite; }
+
+.stagger > *:nth-child(1) { animation-delay:0ms; }
+.stagger > *:nth-child(2) { animation-delay:60ms; }
+.stagger > *:nth-child(3) { animation-delay:120ms; }
+.stagger > *:nth-child(4) { animation-delay:180ms; }
+
+.skeleton {
+  background: linear-gradient(90deg, #F5F5F5 25%, #EDEDED 50%, #F5F5F5 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+/* =============================================
+   DIVIDER
+   ============================================= */
+.divider-text {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #A89AA1;
+  font-size: 0.85rem;
+  font-family: 'DM Sans', sans-serif;
+}
+.divider-text::before, .divider-text::after { content:''; flex:1; height:1px; background:#F0E8EA; }
+
+/* =============================================
+   LAYOUT
+   ============================================= */
+.section-container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+
+/* =============================================
+   TABLE STYLES
+   ============================================= */
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.data-table th {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #A89AA1;
+  padding: 0.85rem 1rem;
+  text-align: left;
+  border-bottom: 1.5px solid #F0E8EA;
+  background: #FAFAFA;
+}
+.data-table td { padding: 1rem; border-bottom: 1px solid #F8F2F4; color: #6B5E65; vertical-align: middle; }
+.data-table tbody tr:hover { background: #FDF2F4; }
+.data-table tbody tr { transition: background 0.15s ease; }
+
+/* =============================================
+   ADMIN SIDEBAR
+   ============================================= */
+.admin-sidebar {
+  background: #FFFFFF;
+  border-right: 1px solid #F0E8EA;
+  min-height: 100vh;
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 768px) { .hide-mobile { display: none !important; } }
+@media (min-width: 769px) { .hide-desktop { display: none !important; } }
