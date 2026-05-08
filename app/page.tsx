@@ -160,7 +160,7 @@ export default function Home() {
       </section>
 
       {/* Shop by Category */}
-      <section className="section-container py-20">
+      <section className="mx-auto max-w-7xl py-20">
         <div className="flex items-end justify-between mb-10">
           <div>
             <p className="text-pink-500 font-black text-[10px] uppercase tracking-[0.2em] mb-2">Explore</p>
@@ -210,7 +210,7 @@ export default function Home() {
 
       {/* Featured Products Banner */}
       {!loading && featured.length > 0 && (
-        <section className="section-container py-24">
+        <section className="mx-auto max-w-7xl py-20">
           <div className="mb-12 text-center">
             <p className="text-amber-500 font-black text-[10px] uppercase tracking-[0.2em] mb-2">Handpicked Quality</p>
             <h2 className="text-3xl md:text-5xl font-bold text-gray-900 font-josefin">The Beauty Edit</h2>
