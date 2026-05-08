@@ -2,7 +2,13 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { shopByCategories } from '@/data/products';
+
+const shopByCategories = [
+  { id: '1', name: 'Makeup', image: 'https://images.unsplash.com/photo-1512496015851-a1dc8a47159c?auto=format&fit=crop&q=80&w=800' },
+  { id: '2', name: 'Skin', image: 'https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&q=80&w=800' },
+  { id: '3', name: 'Hair', image: 'https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&q=80&w=800' },
+  { id: '4', name: 'Fragrance', image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&q=80&w=800' },
+];
 
 export default function CategoryShop() {
   return (
@@ -25,7 +31,7 @@ export default function CategoryShop() {
               className="group relative h-60 sm:h-64 md:h-72 rounded-lg overflow-hidden border border-gray-200 hover:border-gray-300 transition-all duration-300"
             >
               {/* Image */}
-              <div 
+              <div
                 className="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500"
                 style={{ backgroundImage: `url('${bgImage}')` }}
               ></div>

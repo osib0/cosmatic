@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
 import { useStore } from '@/context/StoreContext';
 import { Heart, ArrowLeft, ShoppingBag, Sparkles } from 'lucide-react';
@@ -39,7 +37,7 @@ export default function WishlistPage() {
 
   return (
     <div className="bg-white min-h-screen flex flex-col">
-      <Navbar />
+
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-10 py-12">
         <div className="flex items-center justify-between mb-12">
@@ -93,7 +91,7 @@ export default function WishlistPage() {
         )}
       </main>
 
-      <Footer />
+
     </div>
   );
 }

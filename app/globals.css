@@ -131,6 +131,56 @@ img {
   background-clip: text;
 }
 
+.text-gradient-primary {
+  background: linear-gradient(135deg, #D4697E, #B84F65);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* =============================================
+   OVERRIDE TAILWIND PINK UTILITIES
+   ============================================= */
+.text-pink-500, .text-pink-600 {
+  color: #D4697E !important;
+}
+
+.hover\:text-pink-500:hover, .hover\:text-pink-600:hover {
+  color: #D4697E !important;
+}
+
+.bg-pink-500, .bg-pink-600 {
+  background: linear-gradient(135deg, #D4697E, #B84F65) !important;
+}
+
+.hover\:bg-pink-500:hover, .hover\:bg-pink-600:hover {
+  background: linear-gradient(135deg, #B84F65, #A34053) !important;
+}
+
+.border-pink-500, .border-pink-600 {
+  border-color: #D4697E !important;
+}
+
+.hover\:border-pink-500:hover, .hover\:border-pink-600:hover {
+  border-color: #D4697E !important;
+}
+
+.bg-pink-50 {
+  background-color: #FDF2F4 !important;
+}
+
+.text-pink-400 {
+  color: #D4697E !important;
+}
+
+.border-pink-200 {
+  border-color: #F2B3BF !important;
+}
+
+.fill-pink-500 {
+  fill: #D4697E !important;
+}
+
 /* =============================================
    BUTTON STYLES
    ============================================= */

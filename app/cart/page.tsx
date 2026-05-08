@@ -2,8 +2,6 @@
 
 import React from 'react';
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { useStore } from '@/context/StoreContext';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight } from 'lucide-react';
 
@@ -12,7 +10,7 @@ export default function CartPage() {
 
   return (
     <div className="bg-white min-h-screen">
-      <Navbar />
+
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-12">
         <h1 className="text-3xl font-bold text-gray-900 mb-10 font-josefin">Your Shopping Bag ({cartCount})</h1>
@@ -122,7 +120,7 @@ export default function CartPage() {
         )}
       </main>
 
-      <Footer />
+
     </div>
   );
 }

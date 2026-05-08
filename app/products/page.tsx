@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+
 import ProductCard from '@/components/ProductCard';
 import { ChevronDown, SlidersHorizontal, X } from 'lucide-react';
 
@@ -134,11 +133,11 @@ export default function ProductsPage() {
 
   return (
     <div className="bg-white min-h-screen">
-      <Navbar />
+
 
       {/* Page Header */}
       <div style={{ background: 'linear-gradient(135deg, #FDF2F4 0%, #FDF8F2 100%)', borderBottom: '1px solid #F0E8EA', padding: '2.5rem 0 2rem' }}>
-        <div className="section-container">
+        <div className="mx-auto max-w-7xl px-4">
           <h1 style={{ fontFamily: 'Josefin Sans, sans-serif', fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 700, color: '#1A1219', marginBottom: '0.5rem' }}>
             All Products
           </h1>
@@ -148,7 +147,7 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      <div className="section-container py-8 mt-10">
+      <div className="py-8 mt-10 mx-auto max-w-7xl px-4">
         {/* Toolbar */}
         <div className="flex flex-wrap gap-3 items-center mb-6">
           {/* Search */}
@@ -239,7 +238,7 @@ export default function ProductsPage() {
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {sorted.map(product => (
                   <Link key={product._id} href={`/products/${product._id}`} className="block hover:no-underline">
-                    <ProductCard product={product as unknown as import('@/data/products').Product} />
+                    <ProductCard product={product} />
                   </Link>
                 ))}
               </div>
@@ -248,7 +247,7 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      <Footer />
+
     </div>
   );
 }

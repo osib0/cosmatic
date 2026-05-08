@@ -99,9 +99,9 @@ export default function Navbar() {
             <Link href="/wishlist" className="relative hidden sm:flex w-9 h-9 rounded-lg items-center justify-center transition-all" style={{ color: '#6B5E65', border: '1px solid #F0E8EA' }} title="Wishlist"
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#FDF2F4'; (e.currentTarget as HTMLElement).style.color = '#D4697E'; }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = '#6B5E65'; }}>
-              <Heart size={18} className={wishlist.length > 0 ? 'fill-pink-500 text-pink-500' : ''} />
+              <Heart size={18} className={wishlist.length > 0 ? 'fill-[#D4697E] text-[#D4697E]' : ''} />
               {wishlist.length > 0 && (
-                <span className="absolute -top-1 -right-1 w-2 h-2 bg-pink-500 rounded-full border border-white" />
+                <span className="absolute -top-1 -right-1 w-2 h-2 bg-[#D4697E] rounded-full border border-white" />
               )}
             </Link>
 
@@ -189,12 +189,12 @@ export default function Navbar() {
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-center gap-6 py-2 mb-2">
                 <Link href="/wishlist" onClick={() => setMobileOpen(false)} className="relative p-2 rounded-xl bg-gray-50 text-gray-500">
-                  <Heart size={20} className={wishlist.length > 0 ? 'fill-pink-500 text-pink-500' : ''} />
-                  {wishlist.length > 0 && <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-pink-500 rounded-full border-2 border-white" />}
+                  <Heart size={20} className={wishlist.length > 0 ? 'fill-[#D4697E] text-[#D4697E]' : ''} />
+                  {wishlist.length > 0 && <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-[#D4697E] rounded-full border-2 border-white" />}
                 </Link>
                 <Link href="/cart" onClick={() => setMobileOpen(false)} className="relative p-2 rounded-xl bg-gray-50 text-gray-500">
                   <ShoppingCart size={20} />
-                  {cartCount > 0 && <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-[8px] font-black w-4.5 h-4.5 flex items-center justify-center rounded-full border-2 border-white">{cartCount}</span>}
+                  {cartCount > 0 && <span className="absolute -top-1 -right-1 bg-[#D4697E] text-white text-[8px] font-black w-4.5 h-4.5 flex items-center justify-center rounded-full border-2 border-white">{cartCount}</span>}
                 </Link>
               </div>
 
@@ -217,7 +217,7 @@ export default function Navbar() {
                 ) : (
                   <div className="grid grid-cols-2 gap-3">
                     <Link href="/login" onClick={() => setMobileOpen(false)} className="py-3 rounded-xl font-bold text-sm border border-gray-200 text-center text-gray-700">Sign In</Link>
-                    <Link href="/register" onClick={() => setMobileOpen(false)} className="py-3 rounded-xl font-bold text-sm bg-pink-600 text-white text-center">Register</Link>
+                    <Link href="/register" onClick={() => setMobileOpen(false)} className="py-3 rounded-xl font-bold text-sm bg-[#D4697E] text-white text-center">Register</Link>
                   </div>
                 )}
               </div>

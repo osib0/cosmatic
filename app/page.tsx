@@ -2,11 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+
 import ProductCard from '@/components/ProductCard';
 import { Sparkles, ArrowRight, Star, Shield, Truck, RotateCcw } from 'lucide-react';
-import { Product } from '@/data/products';
 
 interface ApiProduct {
   _id: string;
@@ -23,9 +21,7 @@ interface ApiProduct {
   featured: boolean;
 }
 
-function toProduct(p: ApiProduct): Product {
-  return { id: p._id, name: p.name, price: p.price, originalPrice: p.originalPrice, discount: p.discount, category: p.category, description: p.description, image: p.image, inStock: p.inStock, rating: p.rating, reviews: p.reviews };
-}
+
 
 const CATEGORIES = [
   { name: 'Makeup', emoji: '💄', color: '#FEE2E2', textColor: '#DC2626' },
@@ -66,12 +62,7 @@ export default function Home() {
         setBestsellers(bestData.products ?? []);
         setFeatured(featuredData.products ?? []);
       } catch {
-        // fallback to static if API unavailable
-        try {
-          const { trendingProducts, bestSellers } = await import('@/data/products');
-          setTrending(trendingProducts.map(p => ({ ...p, _id: p.id, featured: false, inStock: p.inStock ?? true })));
-          setBestsellers(bestSellers.map(p => ({ ...p, _id: p.id, featured: false, inStock: p.inStock ?? true })));
-        } catch { /* */ }
+        // Removed fallback to static data
       } finally {
         setLoading(false);
       }
@@ -92,7 +83,7 @@ export default function Home() {
 
   return (
     <div className="bg-white min-h-screen">
-      <Navbar />
+
 
       {/* Hero Section */}
       <section style={{ background: 'linear-gradient(135deg, #FDF2F4 0%, #FFFBF8 50%, #FDF8F2 100%)', overflow: 'hidden', padding: '4rem 0 5rem', position: 'relative' }}>
@@ -271,7 +262,7 @@ export default function Home() {
         </div>
       </section> */}
 
-      {/* <Footer /> */}
+
     </div>
   );
 }

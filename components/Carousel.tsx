@@ -3,12 +3,11 @@
 import React, { useRef } from 'react';
 import Link from 'next/link';
 import ProductCard from './ProductCard';
-import { Product } from '@/data/products';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface CarouselProps {
   title: string;
-  products: Product[];
+  products: any[];
 }
 
 export default function Carousel({ title, products }: CarouselProps) {

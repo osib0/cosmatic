@@ -1,13 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { use } from 'react';
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+
 import ProductCard from '@/components/ProductCard';
-import { allProducts, getProductsByCategory } from '@/data/products';
-import { categories } from '@/data/categories';
 
 interface Props {
   params: Promise<{
@@ -19,10 +16,28 @@ export default function CategoryPage({ params }: Props) {
   const { category } = use(params);
   const decodedCategory = decodeURIComponent(category);
   const categoryName = decodedCategory.charAt(0).toUpperCase() + decodedCategory.slice(1);
-  const products = getProductsByCategory(categoryName);
+  
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('trending');
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(3000);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/products?category=${encodeURIComponent(categoryName)}&limit=100`);
+        const data = await res.json();
+        setProducts(data.products || []);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, [categoryName]);
 
   const filteredProducts = products.filter((p) => p.price >= minPrice && p.price <= maxPrice);
 
@@ -33,24 +48,18 @@ export default function CategoryPage({ params }: Props) {
     return 0;
   });
 
-  const categoryObj = categories.find((c) => c.name === categoryName);
-
   return (
     <div className="bg-white">
-      <Navbar />
+
       {/* Category Header */}
       <div className="py-8 bg-gray-50 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
           <div className="flex items-center gap-4">
-            {categoryObj && (
-              <div
-                className="w-24 h-24 rounded-lg bg-gray-100"
-                style={{ backgroundImage: `url('${categoryObj.image || '/images/category-placeholder.svg'}')`, backgroundSize: 'cover', backgroundPosition: 'center' }}
-              ></div>
-            )}
             <div>
               <h1 className="text-4xl font-bold text-gray-900">{categoryName}</h1>
-              <p className="text-gray-600 mt-2">{products.length} products available</p>
+              <p className="text-gray-600 mt-2">
+                {loading ? 'Loading...' : `${products.length} products available`}
+              </p>
             </div>
           </div>
         </div>
@@ -138,7 +147,7 @@ export default function CategoryPage({ params }: Props) {
         </div>
       </div>
 
-      <Footer />
+
     </div>
   );
 }

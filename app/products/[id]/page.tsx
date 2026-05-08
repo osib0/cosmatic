@@ -2,8 +2,7 @@
 
 import { useState, useEffect, use } from 'react';
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+
 import ProductCard from '@/components/ProductCard';
 import { useStore } from '@/context/StoreContext';
 import { Heart, ShoppingCart, Star, ShieldCheck, Truck, RotateCcw } from 'lucide-react';
@@ -49,12 +48,12 @@ export default function ProductDetailPage({ params }: Props) {
   if (loading) {
     return (
       <div className="bg-white min-h-screen">
-        <Navbar />
+
         <div className="max-w-7xl mx-auto px-4 py-24 text-center">
           <div className="w-12 h-12 border-4 border-pink-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-500 font-medium">Loading premium product...</p>
         </div>
-        <Footer />
+
       </div>
     );
   }
@@ -62,7 +61,7 @@ export default function ProductDetailPage({ params }: Props) {
   if (!product) {
     return (
       <div className="bg-white min-h-screen">
-        <Navbar />
+
         <div className="max-w-7xl mx-auto px-4 py-24 text-center">
           <h1 className="text-4xl font-bold text-gray-900 mb-4 font-josefin">Product Not Found</h1>
           <p className="text-gray-600 mb-8">The product you are looking for does not exist or has been removed.</p>
@@ -70,7 +69,7 @@ export default function ProductDetailPage({ params }: Props) {
             Back to Shop
           </Link>
         </div>
-        <Footer />
+
       </div>
     );
   }
@@ -80,7 +79,7 @@ export default function ProductDetailPage({ params }: Props) {
 
   return (
     <div className="bg-white min-h-screen">
-      <Navbar />
+
 
       {/* Breadcrumb */}
       <div className="bg-gray-50/50 border-b border-gray-100">
@@ -251,7 +250,7 @@ export default function ProductDetailPage({ params }: Props) {
         )}
       </main>
 
-      <Footer />
+
     </div>
   );
 }

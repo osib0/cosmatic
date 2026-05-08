@@ -5,8 +5,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Sparkles, ShoppingBag, MapPin, CreditCard, Check, ArrowLeft, Lock, ShieldCheck, Truck, ChevronRight } from 'lucide-react';
 import { useStore } from '@/context/StoreContext';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 
 declare global {
   interface Window {
@@ -132,7 +130,7 @@ export default function CheckoutPage() {
   if (step === 'success') {
     return (
       <div className="bg-white min-h-screen">
-        <Navbar />
+
         <main className="max-w-7xl mx-auto px-4 py-24 text-center">
           <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-8 border-2 border-green-100 animate-bounce">
             <Check size={48} className="text-green-500" />
@@ -145,14 +143,14 @@ export default function CheckoutPage() {
             <Link href="/products" className="btn-outline">Continue Shopping</Link>
           </div>
         </main>
-        <Footer />
+
       </div>
     );
   }
 
   return (
     <div className="bg-white min-h-screen">
-      <Navbar />
+
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-12">
         {/* Checkout Header */}
@@ -373,7 +371,7 @@ export default function CheckoutPage() {
         </div>
       </main>
 
-      <Footer />
+
     </div>
   );
 }

@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 };
 
 import { StoreProvider } from "@/context/StoreContext";
+import LayoutWrapper from "@/components/LayoutWrapper";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -22,7 +23,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       </head>
       <body className="min-h-full flex flex-col bg-white text-gray-900 antialiased">
         <StoreProvider>
-          {children}
+          <LayoutWrapper>
+            {children}
+          </LayoutWrapper>
         </StoreProvider>
       </body>
     </html>

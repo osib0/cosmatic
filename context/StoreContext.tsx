@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export interface CartItem {
   id: string;
@@ -28,6 +29,8 @@ const StoreContext = createContext<StoreContextType | undefined>(undefined);
 export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [wishlist, setWishlist] = useState<string[]>([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const router = useRouter();
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -35,6 +38,14 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     const savedWishlist = localStorage.getItem('cosmatic_wishlist');
     if (savedCart) setCart(JSON.parse(savedCart));
     if (savedWishlist) setWishlist(JSON.parse(savedWishlist));
+
+    // Check auth state
+    fetch('/api/auth/me')
+      .then(res => res.json())
+      .then(data => {
+        setIsAuthenticated(!!data.user);
+      })
+      .catch(() => setIsAuthenticated(false));
   }, []);
 
   // Save to localStorage on change
@@ -47,6 +58,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   }, [wishlist]);
 
   const addToCart = (product: any, quantity: number = 1) => {
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
     setCart((prev) => {
       const existing = prev.find((item) => item.id === (product._id || product.id));
       if (existing) {
@@ -83,6 +98,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const clearCart = () => setCart([]);
 
   const toggleWishlist = (productId: string) => {
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
     setWishlist((prev) =>
       prev.includes(productId)
         ? prev.filter((id) => id !== productId)

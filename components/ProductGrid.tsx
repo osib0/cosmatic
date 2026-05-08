@@ -3,11 +3,10 @@
 import React from 'react';
 import Link from 'next/link';
 import ProductCard from './ProductCard';
-import { Product } from '@/data/products';
 
 interface ProductGridProps {
   title: string;
-  products: Product[];
+  products: any[];
 }
 
 export default function ProductGrid({ title, products }: ProductGridProps) {

@@ -19,11 +19,11 @@ interface Order {
 }
 
 const STATUS_CONFIG: Record<string, { color: string; bg: string; border: string }> = {
-  pending:    { color: '#D97706', bg: '#FFFBEB', border: '#FDE68A' },
+  pending: { color: '#D97706', bg: '#FFFBEB', border: '#FDE68A' },
   processing: { color: '#2563EB', bg: '#EFF6FF', border: '#BFDBFE' },
-  shipped:    { color: '#7C3AED', bg: '#F5F3FF', border: '#DDD6FE' },
-  delivered:  { color: '#16A34A', bg: '#F0FDF4', border: '#BBF7D0' },
-  cancelled:  { color: '#DC2626', bg: '#FEF2F2', border: '#FECACA' },
+  shipped: { color: '#7C3AED', bg: '#F5F3FF', border: '#DDD6FE' },
+  delivered: { color: '#16A34A', bg: '#F0FDF4', border: '#BBF7D0' },
+  cancelled: { color: '#DC2626', bg: '#FEF2F2', border: '#FECACA' },
 };
 
 const tabs = [
@@ -101,7 +101,7 @@ export default function UserDashboard() {
         </div>
       </header>
 
-      <div className="section-container py-8">
+      <div className="mx-auto max-w-7xl px-4 py-8 mt-10">
         {/* Welcome Banner */}
         <div className="rounded-2xl p-6 mb-6 flex items-center gap-4" style={{ background: 'linear-gradient(135deg, #FDF2F4, #FFF8F2)', border: '1px solid #F2B3BF' }}>
           <div className="w-14 h-14 rounded-2xl gradient-primary flex items-center justify-center text-white text-xl font-bold flex-shrink-0" style={{ fontFamily: 'Josefin Sans, sans-serif' }}>
